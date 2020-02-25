@@ -232,5 +232,45 @@ public class SimpleList {
 		return index;
 	}
 
-	
+	public void append(int addedNum) {
+
+		if (count == list.length) {
+
+			double newSize = list.length * 1.5;
+
+			int[] temp = new int[(int) newSize];
+
+			for (int index = 0; index < list.length; index++) {
+
+				temp[index] = list[index];
+			}
+			list = temp;
+
+		}
+
+		count++;
+
+		list[count - 1] = addedNum;
+
+	}
+
+	public int first() {
+
+		return list[0];
+
+	}
+
+	public int size() {
+
+		int size = 0;
+
+		for (int index = 0; index < list.length; index++) {
+			if (list[index] != 0) {
+				size++;
+			}
+		}
+
+		return size;
+	}
+
 }
