@@ -15,6 +15,8 @@ public class SimpleList {
 	private int[] list;
 	private int count;
 
+	
+
 	/**
 	 * This constructor is used to initialize an array to length 10 and the count of
 	 * elements in the array to 0;
@@ -49,9 +51,21 @@ public class SimpleList {
 
 		} else {
 
-			if (count < 10) {
-				count++;
+			if (count == list.length) {
+
+				double newSize = list.length * 1.5;
+
+				int[] temp = new int[(int) newSize];
+
+				for (int index = 0; index < list.length; index++) {
+
+					temp[index] = list[index];
+				}
+				list = temp;
+
 			}
+
+			count++;
 
 			/**
 			 * This for loop starts at the end of array (count -1) and decrements by 1 until
@@ -94,6 +108,23 @@ public class SimpleList {
 				list[index] = 0;
 				found = true;
 			}
+		}
+
+		double quarterFull = list.length * (.75);
+
+		if (count < quarterFull) {
+
+			double newSize = list.length - list.length * (.25);
+
+			int[] temp = new int[(int) newSize];
+
+			for (int iter = 0; iter < temp.length; iter++) {
+
+				temp[iter] = list[iter];
+			}
+
+			list = temp;
+
 		}
 
 		/**
@@ -200,4 +231,6 @@ public class SimpleList {
 
 		return index;
 	}
+
+	
 }
