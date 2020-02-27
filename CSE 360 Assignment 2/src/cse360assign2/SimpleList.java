@@ -1,11 +1,12 @@
 /**
  * @author Paris Brown
  * @classID 216
- * @Assignment #1
+ * @Assignment #2
  * This file is built to perform simple operations on arrays
- * such as: adding, removing, searching, counting, and displaying the 
- * elements in an array. The default constructor is used to initial-
- * size a new array of length 10 and count of elements of 0. 
+ * such as: adding, removing, searching, counting, appending, increasing array 
+ * size and displaying the elements in an array. The default 
+ * constructor is used to initial-size a new array of length 
+ * 10 and count of elements of 0. 
  */
 
 package cse360assign2;
@@ -15,7 +16,6 @@ public class SimpleList {
 	private int[] list;
 	private int count;
 
-	
 
 	/**
 	 * This constructor is used to initialize an array to length 10 and the count of
@@ -30,12 +30,27 @@ public class SimpleList {
 	 * This method adds an element to the front of an array and shifts the rest of
 	 * the contents to the right. If the array is full then the element in the last
 	 * position is "falls off" and the second to last element takes the last
-	 * position.
+	 * position. If the array is at full capacity when we try to add the new element
+	 * then it will increase the size of the array by 50%
 	 * 
 	 * @param addedNum is the number the user wants to add to the front of the array
 	 */
 
 	public void add(int addedNum) {
+
+		if (count == list.length) {
+
+			double newSize = list.length * 1.5 + 1;
+
+			int[] temp = new int[(int) newSize];
+
+			for (int index = 0; index < list.length; index++) {
+
+				temp[index] = list[index];
+			}
+			list = temp;
+
+		}
 
 		if (count == 0) {
 
@@ -50,20 +65,6 @@ public class SimpleList {
 			count++;
 
 		} else {
-
-			if (count == list.length) {
-
-				double newSize = list.length * 1.5;
-
-				int[] temp = new int[(int) newSize];
-
-				for (int index = 0; index < list.length; index++) {
-
-					temp[index] = list[index];
-				}
-				list = temp;
-
-			}
 
 			count++;
 
@@ -91,61 +92,67 @@ public class SimpleList {
 
 	/**
 	 * This method removes the first occurrence of a number from an array regardless
-	 * of its position in the array.
+	 * of its position in the array. If the array is less than 75% full when an
+	 * element is removed the size will be reduced by 25% of its current size.
 	 * 
 	 * @param removeNum is the number the user wants to remove from the array.
 	 */
 
 	public void remove(int removeNum) {
+		if (count > 0) {
 
-		boolean found = false;
-		int index = -1;
+			boolean found = false;
+			int index = -1;
 
-		while (!found) {
-			index++;
+			while (!found) {
+				index++;
 
-			if (list[index] == removeNum) {
-				list[index] = 0;
-				found = true;
-			}
-		}
-
-		double quarterFull = list.length * (.75);
-
-		if (count < quarterFull) {
-
-			double newSize = list.length - list.length * (.25);
-
-			int[] temp = new int[(int) newSize];
-
-			for (int iter = 0; iter < temp.length; iter++) {
-
-				temp[iter] = list[iter];
+				if (list[index] == removeNum) {
+					list[index] = 0;
+					found = true;
+				}
 			}
 
-			list = temp;
+			if (list.length > 1) {
 
+				double threeQuarterFull = list.length * (.75);
+
+				if (count < threeQuarterFull) {
+
+					double newSize = list.length - list.length * (.25);
+
+					int[] temp = new int[(int) newSize];
+
+					for (int iter = 0; iter < temp.length; iter++) {
+
+						temp[iter] = list[iter];
+					}
+
+					list = temp;
+
+				}
+			}
+
+			/**
+			 * This for loop starts at the index we found the first occurrence of the number
+			 * to remove and increments up to the last element in the array. This for loop
+			 * shifts all the remaining elements in the array to the right after the delete
+			 * is performed.
+			 * 
+			 * @initialization index = index
+			 * @condition index < count - 1
+			 * @update index++
+			 */
+
+			for (int currentIndex = index; currentIndex < count - 1; currentIndex++) {
+
+				list[currentIndex] = list[currentIndex + 1];
+
+			}
+
+			list[count - 1] = 0;
+			count--;
 		}
-
-		/**
-		 * This for loop starts at the index we found the first occurrence of the number
-		 * to remove and increments up to the last element in the array. This for loop
-		 * shifts all the remaining elements in the array to the right after the delete
-		 * is performed.
-		 * 
-		 * @initialization index = index
-		 * @condition index < count - 1
-		 * @update index++
-		 */
-
-		for (int currentIndex = index; currentIndex < count - 1; currentIndex++) {
-
-			list[currentIndex] = list[currentIndex + 1];
-
-		}
-
-		list[count - 1] = 0;
-		count--;
 
 	}
 
@@ -158,19 +165,8 @@ public class SimpleList {
 	 */
 
 	public int count() {
-		int counter = 0;
 
-		/**
-		 * This for loop starts at 0, the first index in an array, and increments to the
-		 * length of the array keeping track of all the non-zero elements in the array.
-		 */
-
-		for (int index = 0; index < list.length; index++) {
-			if (list[index] != 0) {
-				counter++;
-			}
-		}
-		return counter;
+		return count;
 	}
 
 	/**
@@ -232,6 +228,14 @@ public class SimpleList {
 		return index;
 	}
 
+	/**
+	 * This method adds an element to the end of the array and if the array is full
+	 * then it will increase the size of the array by 50% and add the element to the
+	 * end of the array
+	 * 
+	 * @param addedNum the number to the added to the end of the array
+	 */
+
 	public void append(int addedNum) {
 
 		if (count == list.length) {
@@ -254,23 +258,38 @@ public class SimpleList {
 
 	}
 
+	/**
+	 * This method returns the first element in the array
+	 * 
+	 * @return element at index 0 (first element in the array)
+	 */
+
 	public int first() {
 
 		return list[0];
 
 	}
 
+	/**
+	 * This method finds the last element in the array (length-1) and returns it
+	 * 
+	 * @return the element at the last index in the array
+	 */
+
+	public int last() {
+
+		return list[list.length - 1];
+	}
+
+	/**
+	 * This method returns the length of the array 'list'
+	 * 
+	 * @return the length of the array
+	 */
+
 	public int size() {
 
-		int size = 0;
-
-		for (int index = 0; index < list.length; index++) {
-			if (list[index] != 0) {
-				size++;
-			}
-		}
-
-		return size;
+		return list.length;
 	}
 
 }
